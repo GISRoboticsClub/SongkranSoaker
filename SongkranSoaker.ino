@@ -41,8 +41,8 @@
 #define platterV_potent_pin                  A5     // Vertical platter position potentiometer pin
 
   // Digital pin definitions
-#define Pin0                            0       // Pin0 – 
-#define Pin1                            1       // Pin1 - 
+#define Pin0                            0       // Pin0 – Used by Arduino
+#define Pin1                            1       // Pin1 - Used by Arduino
 #define CurrentSenseInput1              2       // Motor Controller - CS: Current sense ANALOG input
 #define CurrentSenseInput2              3       // Motor Controller - CS: Current sense ANALOG input
 #define PWM1                            6       // Motor Controller - PWM Input
@@ -83,6 +83,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // General global variables                // General means used in more than one tab
 
+
 // Timer Chain Variables
 unsigned long systemTime;                                 // Valid system time for the current "loop"
 unsigned long quarterSecondTime = quarterSecond;
@@ -96,10 +97,11 @@ unsigned long sixtySecondTime   = sixtySecond;
 
 
 // Analog variables
-
+bool ButtonState = false;      // Buttonstate is whether or not the button is pushed down. Used for knowing when to fire trigger
+unsigned int joystickH_Value = 0;       // Value read from joystick H potentiometer 10 bits
+unsigned int joystickV_Value = 0;       // Value read from joystick V potentiometer 10 bits
 
 // Motor variables
-
 /*  Motor Shield (VNH2SP30) pin definitions
  xxx[0] controls '1' AKA CW outputs
  xxx[1] controls '2' AKA CCW outputs */

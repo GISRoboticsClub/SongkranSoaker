@@ -11,7 +11,7 @@
 
 // Debug Definitions
 #define serialdebug                     true    // Echos debug info out the Hardware Serial Port
-#define timerdebug                      false    // Enables the Timer Chain debug output
+#define timerdebug                      false   // Enables the Timer Chain debug output
 #define analogdebug                     false   // "" 
 #define mathdebug                       false   // ""
 #define process_h_platterdebug          false   // ""
@@ -44,26 +44,15 @@
 //#define platterV_potent_pin                  A5     // Vertical platter position potentiometer pin
 
   // Digital pin definitions
-<<<<<<< HEAD
   
-#define Pin0                            0       // Pin0 – 
-#define Pin1                            1       // Pin1 - 
+#define ArduinoUSB_RX                   0       // Arduino USB Serial Port RX
+#define ArduinoUSB_TX                   1       // Arduino USB Serial Port TX
 #define Pin2                            2       // Pin2 - 
 #define Pin3                            3       // Pin3 -
 #define MotorAInput2                    4       // Motor Controller - INA: Clockwise input
 #define PWM1                            5       // Motor Controller - PWM Input
 #define PWM2                            6       // Motor Controller - PWN Input
 #define MotorAInput1                    7       // Motor Controller - INA: Clockwise input
-=======
-#define Pin0                            0       // Pin0 – Used by Arduino
-#define Pin1                            1       // Pin1 - Used by Arduino
-#define CurrentSenseInput1              2       // Motor Controller - CS: Current sense ANALOG input
-#define CurrentSenseInput2              3       // Motor Controller - CS: Current sense ANALOG input
-#define PWM1                            6       // Motor Controller - PWM Input
-#define PWM2                            5       // Motor Controller - PWN Input
-#define MotorAInput1                    4       // Motor Controller - INA: Clockwise input
-#define MotorAInput2                    7       // Motor Controller - INA: Clockwise input
->>>>>>> origin/master
 #define MotorBInput1                    8       // Motor Controller - INB: Counter-clockwise input
 #define MotorBInput2                    9       // Motor Controller - INB: Counter-clockwise input
 #define PushButton                      10      // Joystick Push Button
@@ -112,12 +101,7 @@ unsigned long sixtySecondTime   = sixtySecond;
 
 
 // Analog variables
-<<<<<<< HEAD
-
 bool ButtonState = false;               // Buttonstate is whether or not the button is pushed down. Used for knowing when to fire trigger
-=======
-bool ButtonState = false;      // Buttonstate is whether or not the button is pushed down. Used for knowing when to fire trigger
->>>>>>> origin/master
 unsigned int joystickH_Value = 0;       // Value read from joystick H potentiometer 10 bits
 unsigned int joystickV_Value = 0;       // Value read from joystick V potentiometer 10 bits
 

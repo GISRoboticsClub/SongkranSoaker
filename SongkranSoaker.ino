@@ -18,6 +18,7 @@
 #define process_v_platterdebug          false   // ""
 #define motordebug                      true    // 
 
+
 //////////////////////////////////////////////////////////////////////////////
 
 //Includes Files
@@ -33,28 +34,31 @@
   
   // Analog pin definitions
   
-#define SwitchOutput1                        A0     // EN: Status of switches output 
-#define SwitchOutput2                        A1     // EN: Status of switches output 
-#define joystickH_potent_pin                 A2     // Horisantal joystick position potentiometer pin
-#define joystickV_potent_pin                 A3     // Vertical joystick position potentiometer pin
-#define platterH_potent_pin                  A4     // Horizantal platter position potentiometer pin
-#define platterV_potent_pin                  A5     // Vertical platter position potentiometer pin
+#define SwitchOutput1                        A0     // Motor Controller - EN: Status of switches output 
+#define SwitchOutput2                        A1     // Motor Controller - EN: Status of switches output 
+#define CurrentSenseInput1                   A2     // Motor Controller - CS: Current sense ANALOG input
+#define CurrentSenseInput2                   A3     // Motor Controller - CS: Current sense ANALOG input
+#define joystickH_potent_pin                 A4     // Horisantal joystick position potentiometer pin
+#define joystickV_potent_pin                 A5     // Vertical joystick position potentiometer pin
+//#define platterH_potent_pin                  A4     // Horizantal platter position potentiometer pin
+//#define platterV_potent_pin                  A5     // Vertical platter position potentiometer pin
 
   // Digital pin definitions
+  
 #define Pin0                            0       // Pin0 – 
 #define Pin1                            1       // Pin1 - 
-#define CurrentSenseInput1              2       // Motor Controller - CS: Current sense ANALOG input
-#define CurrentSenseInput2              3       // Motor Controller - CS: Current sense ANALOG input
-#define PWM1                            6       // Motor Controller - PWM Input
-#define PWM2                            5       // Motor Controller - PWN Input
-#define MotorAInput1                    4       // Motor Controller - INA: Clockwise input
-#define MotorAInput2                    7       // Motor Controller - INA: Clockwise input
+#define Pin2                            2       // Pin2 - 
+#define Pin3                            3       // Pin3 -
+#define MotorAInput2                    4       // Motor Controller - INA: Clockwise input
+#define PWM1                            5       // Motor Controller - PWM Input
+#define PWM2                            6       // Motor Controller - PWN Input
+#define MotorAInput1                    7       // Motor Controller - INA: Clockwise input
 #define MotorBInput1                    8       // Motor Controller - INB: Counter-clockwise input
 #define MotorBInput2                    9       // Motor Controller - INB: Counter-clockwise input
 #define PushButton                      10      // Joystick Push Button
 #define Pin11                           11      // Pin11 - 
 #define Pin12                           12      // Pin12 - 
-#define statpin                         13      // Motor Controller - status pin
+#define statpin                         13      // Motor Controller - status pin  *** Error Condition meaning the current going to (at least) one of the motors is too high ***
 
 // Timer Chain Definitions - all timing in msec
 #define quarterSecond                   250
@@ -97,18 +101,31 @@ unsigned long sixtySecondTime   = sixtySecond;
 
 // Analog variables
 
+bool ButtonState = false;               // Buttonstate is whether or not the button is pushed down. Used for knowing when to fire trigger
+unsigned int joystickH_Value = 0;       // Value read from joystick H potentiometer 10 bits
+unsigned int joystickV_Value = 0;       // Value read from joystick V potentiometer 10 bits
 
 // Motor variables
 
 /*  Motor Shield (VNH2SP30) pin definitions
  xxx[0] controls '1' AKA CW outputs
  xxx[1] controls '2' AKA CCW outputs */
-int inApin[2] = {MotorAInput2, MotorAInput1};  // INA: Clockwise input
-int inBpin[2] = {MotorBInput1, MotorBInput2};  // INB: Counter-clockwise input
-int pwmpin[2] = {PWM2, PWM1};  // PWM input
-int cspin[2] = {CurrentSenseInput1, CurrentSenseInput2};   // CS: Current sense ANALOG input
-int enpin[2] = {SwitchOutput1, SwitchOutput2};   // EN: Status of switches output (Analog pin)
+int inApin[2] = {MotorAInput2, MotorAInput1};                // INA: Clockwise input
+int inBpin[2] = {MotorBInput1, MotorBInput2};                // INB: Counter-clockwise input
+int pwmpin[2] = {PWM2, PWM1};                                // PWM input
+int cspin[2]  = {CurrentSenseInput1, CurrentSenseInput2};    // CS: Current sense ANALOG input
+int enpin[2]  = {SwitchOutput1, SwitchOutput2};              // EN: Status of switches output (Analog pin)
 
+int horizontal_direction;
+int vertical_direction;
+int pwm;
+int motor;
+int motor_direction;
+int horizontal_pwm;
+int vertical_pwm;
+int motor_stop;
+int direction_input;
+int previous;
 
 ///////////////////////////////////////////////////////////////////////////////
 void setup(){

@@ -25,6 +25,10 @@ void analog_loop() {
 
 // variables joystick potentiometers are equal to the read of their corresponding potentiometer pin
   joystickH_Value = analogRead(joystickH_potent_pin);
+//  Serial.print("Hor = ");
+//  Serial.print(joystickH_Value);
   joystickV_Value = analogRead(joystickV_potent_pin);
+//  Serial.print("  Ver = ");
+//  Serial.println(joystickV_Value);
 }
 

@@ -115,6 +115,9 @@ int pwmpin[2] = {PWM2, PWM1};                                // PWM input
 int cspin[2]  = {CurrentSenseInput1, CurrentSenseInput2};    // CS: Current sense ANALOG input
 int enpin[2]  = {SwitchOutput1, SwitchOutput2};              // EN: Status of switches output (Analog pin)
 
+int lastdir[2];
+int currentdir[2];
+
 int horizontal_direction;
 int vertical_direction;
 int pwm;

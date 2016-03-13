@@ -12,11 +12,12 @@
 // Debug Definitions
 #define serialdebug                     true    // Echos debug info out the Hardware Serial Port
 #define timerdebug                      false   // Enables the Timer Chain debug output
-#define analogdebug                     false   // "" 
+#define analogdebug                     true    // "" 
 #define mathdebug                       false   // ""
 #define process_h_platterdebug          false   // ""
 #define process_v_platterdebug          false   // ""
-#define motordebug                      true    // 
+#define motordebug                      true    // ""
+#define nomotorshielddebug              true    // true = working with NO motor shield
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -117,31 +118,21 @@ int enpin[2]  = {SwitchOutput1, SwitchOutput2};              // EN: Status of sw
 
 int lastdir[2];
 int currentdir[2];
-
-int horizontal_direction;
-int vertical_direction;
-int pwm;
-int motor;
-int motor_direction;
-int horizontal_pwm;
-int vertical_pwm;
-int motor_stop;
-int direction_input;
-int previous;
+int currentpwm[2];
 
 ///////////////////////////////////////////////////////////////////////////////
 void setup(){
 
-// Initialize for serial window debugging and communicating to the ESampler
+// Initialize for serial window debugging and communicating to the world
   Serial.begin(9600);
   while (!Serial) { ; } // wait for serial port to connect. Needed for Leonardo only
   if (serialdebug) Serial.println("Setting up Arduino System");         // Notice this debug is for all debugging...
 
   analog_setup();
-  math_setup();
-  motor_setup();
   process_h_platter_setup();
   process_v_platter_setup();
+  math_setup();
+  motor_setup();
   setup_TimerChain();
   }
 
@@ -150,10 +141,10 @@ void loop(){
   systemTime = millis();
 
   analog_loop();
-  math_loop();
-  motor_loop();
   process_h_platter_loop();
   process_v_platter_loop();
+  math_loop();
+  motor_loop();
   loop_TimerChain();
 }
 

@@ -7,7 +7,7 @@
 //            This number will overflow (go back to zero), after approximately 50 days.
 //            https://www.arduino.cc/en/Reference/Millis
 //
-//    This means that if the the SerialBox sketch runs to this approximately 50 day limit  timer chain
+//    This means that if this sketch runs to this approximately 50 day limit timer chain
 //    errors WILL occur.
 //
 
@@ -50,18 +50,12 @@ void processOneSecond() {
 void processFiveSecond() {
   if (serialdebug && timerdebug) Serial.print("5");
   fiveSecondTime += fiveSecond;
-
-  motorGo(MotorA, CW, 100);
-  motorGo(MotorB, CCW, 100);
 }
 
 //////////////////////////////////////////////////////////////////////////
 void processTenSecond() {
   if (serialdebug && timerdebug) Serial.print("T");
   tenSecondTime += tenSecond;
-
-  motorGo(MotorA, CCW, 255);
-  motorGo(MotorB, CW, 255);
 }
 
 //////////////////////////////////////////////////////////////////////////

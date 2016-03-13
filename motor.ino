@@ -1,4 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Code for calculating the amount needed to move servos.
+//
+//   This code controls the DC motors.  Global variables flowing thru analog -> process_*_platter -> math give the input to the motor control routines.
+//
+//   motorInput is the routine that takes numerical input from other routines and does not require understanding of motor details.
+//
+//   motorGo is the internal routine used to control the actual motors and is not to be used by other rourines.
+//
+//   Last Modified: 3/13/2016*
+//
 
 void motor_setup()
 {
@@ -25,7 +35,15 @@ void motor_setup()
     digitalWrite(inApin[i], LOW);
     digitalWrite(inBpin[i], LOW);
     analogWrite(pwmpin[i], 0);
+
+    lastdir[i] = BRAKEVCC;
+    currentdir[i] = BRAKEVCC;
+    currentpwm[i] = 0;
   }
+
+// Put up a message if the current sensor check is disabled.
+  if (serialdebug && nomotorshielddebug) Serial.println("*** N O T I C E *** Motor overcurrent sensors NOT checked.  Be sure no high currents are possible.");
+
 }
 
 
@@ -35,21 +53,18 @@ void motor_loop() {
   int i;
 
 // Check for Over Current condition and if so stop everything and set the alarm
-  if ((analogRead(cspin[0]) > CS_THRESHOLD) || (analogRead(cspin[1]) > CS_THRESHOLD)) {
+  if (!nomotorshielddebug && ((analogRead(cspin[0]) > CS_THRESHOLD) || (analogRead(cspin[1]) > CS_THRESHOLD))) {
     digitalWrite(statpin, HIGH);
-    motorGo(MotorA, CW, 0);
-    motorGo(MotorB, CW, 0);
+    motorGo(MotorA, BRAKEVCC, 0);
+    motorGo(MotorB, BRAKEVCC, 0);
     if (serialdebug && motordebug) Serial.println("***ERROR - At least one CS Pin > Threshold!  Motors could be BURNING!!! ***");
   }
 
-// check to see if direction needs to be changed
+// check to see if direction needs to be changed to complete the transition from one direction to the other
    for (i=0; i<2; i++)   {
     if (currentdir[i] != lastdir[i])  {
-      if (lastdir[i] != BRAKEVCC) {
-        motorGo(i, BRAKEVCC, 0);
-      }
+      motorGo(i, currentdir[i], currentpwm[i]);
     }
-  lastdir[i] = currentdir[i];
   }
 }
 
@@ -78,22 +93,22 @@ void motor_loop() {
 
 void motorGo(unsigned int motor, unsigned int motor_direction, unsigned int pwm) {
   if (motor <= 1) {
-if (motor == 0){
-Serial.print("motor = ");
-Serial.print(motor);
-Serial.print("  motor direction = ");
-Serial.print(motor_direction);
-Serial.print("  pwm = ");
-Serial.println(pwm);
-}
 
+    currentdir[motor] = motor_direction;
+    currentpwm[motor] = pwm;
 
-     currentdir[motor] = motor_direction;
+    if (motor_direction == BRAKEGND) motor_direction = BRAKEVCC;
+    if (lastdir[motor] == CCW & motor_direction == CW) motor_direction = BRAKEVCC;
+    if (lastdir[motor] == CW & motor_direction == CCW) motor_direction = BRAKEVCC;
 
-    if (motor_direction == BRAKEGND) { motor_direction = BRAKEVCC; }
-    if (lastdir[motor] == CCW & motor_direction == CW) {motor_direction = BRAKEVCC;}
-    if (lastdir[motor] == CW & motor_direction == CCW) {motor_direction = BRAKEVCC;}
-
+    if (serialdebug && motordebug) {
+      Serial.print("In motorGo -> motor = ");
+      Serial.print(motor);
+      Serial.print("  motor direction = ");
+      Serial.print(motor_direction);
+      Serial.print("  pwm = ");
+      Serial.println(pwm);
+    }
     switch (motor_direction) {
     case BRAKEVCC:
        //brake to VCC
@@ -113,13 +128,15 @@ Serial.println(pwm);
       digitalWrite(inBpin[motor], HIGH);
       break;
     
-      case BRAKEGND:
+    case BRAKEGND:
        //brake to ground
        digitalWrite(inApin[motor], LOW);
        digitalWrite(inBpin[motor], LOW);
       break;
      }
      analogWrite(pwmpin[motor], pwm);
+
+     lastdir[motor] = motor_direction;
   } 
 }
 
@@ -135,12 +152,17 @@ Serial.println(pwm);
 void motorInput(unsigned int motor, signed int motor_speed) {
   unsigned int motor_direction, pwm;
 
-//  Serial.print("motor = ");
-//  Serial.print(motor);
-//  Serial.print("  motor speed = ");
-//  Serial.println(motor_speed);
+  if (serialdebug && motordebug) {
+    Serial.print("In motorInput -> motor = ");
+    Serial.print(motor);
+    Serial.print("  motor speed = ");
+    Serial.println(motor_speed);
+  }
   
-  if (motor_speed >= 0){
+  if (motor_speed == 0) {
+    motor_direction = BRAKEVCC;
+  }
+  else if (motor_speed > 0) {
     motor_direction = CW;
   }
   else {

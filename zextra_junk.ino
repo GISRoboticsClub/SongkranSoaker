@@ -167,4 +167,39 @@ void platterH_setup(int a, int b) {
     Serial.print("servo = ");
     Serial.println(change[1]);
     */
+
+/*    // enter -0+ manually for each motor if needed for debugging
+  if (true) {
+    int incomingByte;
+    Serial.print("Enter Hor Motor Direction (-0+) ");
+    do {delay(1);} while (Serial.available() < 3);
+    //Serial.print(Serial.available());
+    //Serial.print("  ");
+    incomingByte = Serial.read();
+    Serial.println(char(incomingByte));
+    Serial.read();
+    Serial.read();
+    Serial.read();
+//    if (incomingByte == '-') joystickH_Value = 0;
+//    if (incomingByte == '+') joystickH_Value = 1023;
+    if (incomingByte == '-') joystickH_Value = 256;
+    if (incomingByte == '+') joystickH_Value = 767;
+    if (incomingByte == '0') joystickH_Value = 512;
+
+    Serial.print("Enter Ver Motor Direction (-0+) ");
+    do {delay(1);} while (Serial.available() < 3);
+    //Serial.print(Serial.available());
+    //Serial.print("  ");
+    incomingByte = Serial.read();
+    Serial.println(char(incomingByte));
+    Serial.read();
+    Serial.read();
+    Serial.read();
+//    if (incomingByte == '-') joystickV_Value = 0;
+//    if (incomingByte == '+') joystickV_Value = 1023;
+    if (incomingByte == '-') joystickV_Value = 256;
+    if (incomingByte == '+') joystickV_Value = 767;
+    if (incomingByte == '0') joystickV_Value = 512;
+  }
+*/
     

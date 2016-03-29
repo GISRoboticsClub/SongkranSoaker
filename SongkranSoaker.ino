@@ -16,8 +16,8 @@
 #define mathdebug                       false   // ""
 #define process_h_platterdebug          false   // ""
 #define process_v_platterdebug          false   // ""
-#define motordebug                      true    // ""
-#define nomotorshielddebug              true    // true = working with NO motor shield
+#define motordebug                      false    // ""
+#define nomotorshielddebug              false    // true = working with NO motor shield
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -44,22 +44,34 @@
 //#define platterH_potent_pin                  A4     // Horizantal platter position potentiometer pin
 //#define platterV_potent_pin                  A5     // Vertical platter position potentiometer pin
 
-  // Digital pin definitions
-  
+// Digital pin definitions
+
+
+// Colors
+// Ground   Black/Brown   -  Ground
+// Red      +5V           -  5V
+// Blue     Pin D13       -  OverCurrent LED
+// Yellow   Pin A5        -  Joystick Vertical Input
+// Orange   Pin D10       -  Joystick Pushbutton Input
+// Green    Pin A4        -  Joystick Horizontal Input
+// Purple - Unused
+// Brown -  Unused
+
+
 #define ArduinoUSB_RX                   0       // Arduino USB Serial Port RX
 #define ArduinoUSB_TX                   1       // Arduino USB Serial Port TX
 #define Pin2                            2       // Pin2 - 
 #define Pin3                            3       // Pin3 -
-#define MotorAInput2                    4       // Motor Controller - INA: Clockwise input
+#define Motor1Input1                    4       // Motor Controller - INA: Clockwise input
 #define PWM1                            5       // Motor Controller - PWM Input
 #define PWM2                            6       // Motor Controller - PWN Input
-#define MotorAInput1                    7       // Motor Controller - INA: Clockwise input
-#define MotorBInput1                    8       // Motor Controller - INB: Counter-clockwise input
-#define MotorBInput2                    9       // Motor Controller - INB: Counter-clockwise input
+#define Motor0Input1                    7       // Motor Controller - INA: Clockwise input
+#define Motor0Input2                    8       // Motor Controller - INB: Counter-clockwise input
+#define Motor1Input2                    9       // Motor Controller - INB: Counter-clockwise input
 #define PushButton                      10      // Joystick Push Button
 #define Pin11                           11      // Pin11 - 
 #define Pin12                           12      // Pin12 - 
-#define statpin                         13      // Motor Controller - status pin  *** Error Condition meaning the current going to (at least) one of the motors is too high ***
+#define statpin                         13      //  *** BLUE WIRE *** Motor Controller - status pin  *** Error Condition meaning the current going to (at least) one of the motors is too high ***
 
 // Timer Chain Definitions - all timing in msec
 #define quarterSecond                   250
@@ -110,8 +122,10 @@ unsigned int joystickV_Value = 0;       // Value read from joystick V potentiome
 /*  Motor Shield (VNH2SP30) pin definitions
  xxx[0] controls '1' AKA CW outputs
  xxx[1] controls '2' AKA CCW outputs */
-int inApin[2] = {MotorAInput2, MotorAInput1};                // INA: Clockwise input
-int inBpin[2] = {MotorBInput1, MotorBInput2};                // INB: Counter-clockwise input
+//int inApin[2] = {MotorAInput2, MotorAInput1};                // INA: Clockwise input
+//int inBpin[2] = {MotorBInput1, MotorBInput2};                // INB: Counter-clockwise input
+int inApin[2] = {Motor0Input1, Motor0Input2};                // INA: Clockwise input
+int inBpin[2] = {Motor1Input1, Motor1Input2};                // INB: Counter-clockwise input
 int pwmpin[2] = {PWM2, PWM1};                                // PWM input
 int cspin[2]  = {CurrentSenseInput1, CurrentSenseInput2};    // CS: Current sense ANALOG input
 int enpin[2]  = {SwitchOutput1, SwitchOutput2};              // EN: Status of switches output (Analog pin)
